@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>First chalange</title>
+
+
+
+<style type="text/css">
+	*{
+		margin: 0;
+		padding: 0;
+	}
+	ul{
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	li{
+		display: inline-block;
+	}
+	.container{
+		height: 100vh;
+		display: flex;
+		justify-content: center;
+	}
+
+	ul {
+		display: flex;
+		justify-content: space-around;
+		flex: 1;
+		flex-flow: row wrap;
+		align-items: center;
+	}
+	li {
+		border: 2px solid aquamarine;
+	    background: #d2e8dabd;
+	    padding: 20px;
+	    color: #906f6f;
+	    cursor: pointer;
+	    text-align: center;
+	    transition: all .2s ease-in-out;
+	}
+
+	li span {
+		display: block;
+		font-size: .7em;
+	}
+	li kbd {
+		background-color: transparent;
+		color: #000;
+		font-size: 2em;
+	}
+	li.play{
+		background: red;
+		border:2px solid green;
+		transform: scale(1.1);
+	}
+</style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+const data = [
+	{key: 'A', code: 65, sound: 'clap'},
+	{key: 'S', code: 83, sound: 'hihat'},
+	{key: 'D', code: 68, sound: 'kick'},
+	{key: 'F', code: 70, sound: 'openhat'},
+	{key: 'G', code: 71, sound: 'boom'},
+	{key: 'H', code: 72, sound: 'ride'},
+	{key: 'J', code: 74, sound: 'snare'},
+	{key: 'K', code: 75, sound: 'tom'},
+	{key: 'L', code: 76, sound: 'tink'}
+];
+
+
+(function(){
+	var container = document.createElement("div");
+	container.classList.add('container');
+	document.body.appendChild(container);
+
+	var sounds = document.createElement("div");
+	sounds.classList.add('sounds');
+	document.body.appendChild(sounds);
+
+	const k =`<ul>${data.map((k)=>`<li data-key="${k.code}"><kbd>${k.key}</kbd><span>${k.sound}</span></li>`).join('')}</ul>`;
+	const s = data.map((k)=>`<audio data-key="${k.code}" src="audio/${k.sound}.wav"></audio>`).join('');
+
+	container.innerHTML= k;
+	sounds.innerHTML= s;
+
+})();
+
+	window.addEventListener("keydown",function(e){
+		let sound = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+		let key = document.querySelector(`li[data-key="${e.keyCode}"]`);
+		if (!sound) return;
+		sound.currentTime=0;
+		sound.play();
+
+		key.classList.add('play');
+	})
+
+	function removetransition(e){
+		if (e.propertyName == 'transform') this.classList.remove('play');
+	}
+
+	const keys = document.querySelectorAll(`li[data-key]`);
+	keys.forEach(k=> k.addEventListener('transitionend',removetransition))
+</script>
+
+</body>
+</html>
